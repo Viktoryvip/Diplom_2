@@ -36,32 +36,36 @@ public class CreateLoginDataTest {
     @DisplayName("Создание уникального пользователя")
     public void createUserTest() {
         ValidatableResponse createResponse = usersData.create(user);
+        accessToken = createResponse.extract().path("accessToken");
         statusCode = createResponse
+                .body("success", equalTo(true))
                 .extract()
                 .statusCode();
         assertThat(statusCode, equalTo(SC_OK));
-        accessToken = createResponse.extract().path("accessToken");
-    }
+        }
 
     @Test
     @DisplayName("Создание пользователя, который уже зарегистрирован")
-    public void createRegistredUserTest() {
+    public void createRegisteredUserTest() {
         ValidatableResponse createResponse1 = usersData.create(user);
         ValidatableResponse createResponse2 = usersData.create(user);
-        statusCode = createResponse2
-                .extract()
-                .statusCode();
-        assertThat(statusCode, equalTo(SC_FORBIDDEN));
         accessToken = createResponse1
                 .extract()
                 .path("accessToken");
-    }
+
+        statusCode = createResponse2
+                .body("success", equalTo(false))
+                .extract()
+                .statusCode();
+        assertThat(statusCode, equalTo(SC_FORBIDDEN));
+         }
 
     @Test
     @DisplayName("Создание пользователя без имени")
     public void createUserWithoutNameTest() {
         user.setName(null);
         statusCode = usersData.create(user)
+                .body("success", equalTo(false))
                 .extract()
                 .statusCode();
         assertThat(statusCode, equalTo(SC_FORBIDDEN));
@@ -72,6 +76,7 @@ public class CreateLoginDataTest {
     public void createUserWithoutEmailTest() {
         user.setEmail(null);
         statusCode = usersData.create(user)
+                .body("success", equalTo(false))
                 .extract()
                 .statusCode();
         assertThat(statusCode, equalTo(SC_FORBIDDEN));
@@ -82,6 +87,7 @@ public class CreateLoginDataTest {
     public void createUserWithoutPasswordTest() {
         user.setPassword(null);
         statusCode = usersData.create(user)
+                .body("success", equalTo(false))
                 .extract()
                 .statusCode();
         assertThat(statusCode, equalTo(SC_FORBIDDEN));

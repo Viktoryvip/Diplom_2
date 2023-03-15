@@ -37,11 +37,13 @@ public class LoginDataTest {
     public void loginUserTest() {
         Login login = new Login(user.getEmail(), user.getPassword());
         ValidatableResponse loginResponse = usersData.login(login);
+        accessToken = loginResponse.extract().path("accessToken");
         int statusCode = loginResponse
+                .body("success", equalTo(true))
                 .extract()
                 .statusCode();
         assertThat(statusCode, equalTo(SC_OK));
-        accessToken = loginResponse.extract().path("accessToken");
+
     }
 
     @Test
@@ -50,6 +52,7 @@ public class LoginDataTest {
         Login login = new Login("email", user.getPassword());
         ValidatableResponse loginResponse = usersData.login(login);
         int statusCode = loginResponse
+                .body("success", equalTo(false))
                 .extract()
                 .statusCode();
         assertThat(statusCode, equalTo(SC_UNAUTHORIZED));
@@ -61,6 +64,7 @@ public class LoginDataTest {
         Login login = new Login(user.getEmail(), "password");
         ValidatableResponse loginResponse = usersData.login(login);
         int statusCode = loginResponse
+                .body("success", equalTo(false))
                 .extract()
                 .statusCode();
         assertThat(statusCode, equalTo(SC_UNAUTHORIZED));

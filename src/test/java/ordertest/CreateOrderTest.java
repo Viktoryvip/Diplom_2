@@ -25,7 +25,6 @@ public class CreateOrderTest {
     private User user;
     private Order order;
 
-
     @Before
     public void setUp() {
         usersData = new UsersData();
@@ -39,22 +38,25 @@ public class CreateOrderTest {
         try {
             usersData.delete(accessToken);        }
        catch (Throwable e) {
-           e.printStackTrace();        }}
-
+           e.printStackTrace();
+        }
+    }
 
     @Test
     @DisplayName("Создание заказа после создания пользователя и его авторизации")
     public void createOrderAuthorizedUser() {
         Login login = new Login(user.getEmail(), user.getPassword());
         ValidatableResponse loginResponse = usersData.login(login);
+        accessToken = loginResponse.extract().path("accessToken");
         int statusCodeLogin = loginResponse
+                .body("success", equalTo(true))
                 .extract()
                 .statusCode();
-        accessToken = loginResponse.extract().path("accessToken");
 
         order = new Order(ingredients);
         ValidatableResponse orderResponse = usersOrder.createOrderAuthorizedUser(order, accessToken);
         int statusCodeOrder = orderResponse
+                .body("success", equalTo(true))
                 .extract()
                 .statusCode();
         assertThat(statusCodeLogin, equalTo(SC_OK));
@@ -67,27 +69,26 @@ public class CreateOrderTest {
         order = new Order(ingredients);
         ValidatableResponse orderResponse = usersOrder.createOrderUnauthorizedUser(order);
         int statusCodeOrder = orderResponse
+                .body("success", equalTo(true))
                 .extract()
                 .statusCode();
         assertThat(statusCodeOrder, equalTo(SC_OK));
     }
-
-
-
 
     @Test
     @DisplayName("Создание заказа после создания пользователя и его авторизации, но без ингредиентов")
     public void createOrderWithoutIngredients() {
         Login login = new Login(user.getEmail(), user.getPassword());
         ValidatableResponse loginResponse = usersData.login(login);
+        accessToken = loginResponse.extract().path("accessToken");
         int statusCodeLogin = loginResponse
                 .extract()
                 .statusCode();
-        accessToken = loginResponse.extract().path("accessToken");
 
         order = new Order(null);
         ValidatableResponse orderResponse = usersOrder.createOrderAuthorizedUser(order, accessToken);
         int statusCodeOrder = orderResponse
+                .body("success", equalTo(false))
                 .extract()
                 .statusCode();
         assertThat(statusCodeLogin, equalTo(SC_OK));
@@ -99,14 +100,15 @@ public class CreateOrderTest {
     public void createOrderWithWrongHashIngredient() {
         Login login = new Login(user.getEmail(), user.getPassword());
         ValidatableResponse loginResponse = usersData.login(login);
+        accessToken = loginResponse.extract().path("accessToken");
         int statusCodeLogin = loginResponse
                 .extract()
                 .statusCode();
-        accessToken = loginResponse.extract().path("accessToken");
 
         order = new Order(List.of("60d3463f7034a000269f45e7"));
         ValidatableResponse orderResponse = usersOrder.createOrderAuthorizedUser(order, accessToken);
         int statusCodeOrder = orderResponse
+                .body("success", equalTo(false))
                 .extract()
                 .statusCode();
         assertThat(statusCodeLogin, equalTo(SC_OK));

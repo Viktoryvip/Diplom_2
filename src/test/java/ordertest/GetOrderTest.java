@@ -48,21 +48,24 @@ public class GetOrderTest {
     public void getOrderAuthorizedUser() {
         Login login = new Login(user.getEmail(), user.getPassword());
         ValidatableResponse loginResponse = usersData.login(login);
+        accessToken = loginResponse.extract().path("accessToken");
         int statusCodeLogin = loginResponse
+                .body("success", equalTo(true))
                 .extract()
                 .statusCode();
         assertThat(statusCodeLogin, equalTo(SC_OK));
-        accessToken = loginResponse.extract().path("accessToken");
 
         order = new Order(ingredients);
         ValidatableResponse orderResponse = usersOrder.createOrderAuthorizedUser(order, accessToken);
         int statusCodeOrder = orderResponse
+                .body("success", equalTo(true))
                 .extract()
                 .statusCode();
         assertThat(statusCodeOrder, equalTo(SC_OK));
 
         ValidatableResponse getResponseAuthorizedUser = usersOrder.getOrderAuthorizedUser(accessToken);
         int statusCodeGetOrder = getResponseAuthorizedUser
+                .body("success", equalTo(true))
                 .extract()
                 .statusCode();
         assertThat(statusCodeGetOrder, equalTo(SC_OK));
@@ -74,12 +77,14 @@ public class GetOrderTest {
         order = new Order(ingredients);
         ValidatableResponse orderResponseAuthorizedUser = usersOrder.createOrderUnauthorizedUser(order);
         int statusCodeGetOrderAuthorizedUser = orderResponseAuthorizedUser
+                .body("success", equalTo(true))
                 .extract()
                 .statusCode();
         assertThat(statusCodeGetOrderAuthorizedUser, equalTo(SC_OK));
 
         ValidatableResponse orderResponseUnauthorizedUser = usersOrder.getOrderUnauthorizedUser();
         int statusCodeGetOrderUnauthorizedUser = orderResponseUnauthorizedUser
+                .body("success", equalTo(false))
                 .extract()
                 .statusCode();
         System.out.println(statusCodeGetOrderUnauthorizedUser);

@@ -13,8 +13,7 @@ public class UsersData extends BaseSite {
                 .body(user)
                 .log().all()
                 .post(Paths.USER_PATH + "register")
-                .then()
-                .log().all();
+                .then();
     }
 
     @Step("Логин пользователя")
@@ -24,8 +23,7 @@ public class UsersData extends BaseSite {
                 .body(login)
                 .log().all()
                 .post(Paths.USER_PATH + "login")
-                .then()
-                .log().all();
+                .then();
     }
 
     @Step("Удаление пользователя")
@@ -35,8 +33,7 @@ public class UsersData extends BaseSite {
                 .body(accessToken)
                 .log().all()
                 .delete(Paths.USER_PATH + "user")
-                .then()
-                .log().all();
+                .then();
     }
 
     @Step("Обновление данных авторизованного пользователя")
@@ -47,8 +44,7 @@ public class UsersData extends BaseSite {
                 .body(user)
                 .log().all()
                 .patch(Paths.USER_PATH + "user")
-                .then()
-                .log().all();
+                .then();
     }
 
     @Step("Обновление данных неавторизованного пользователя")
@@ -58,7 +54,6 @@ public class UsersData extends BaseSite {
                 .body(user)
                 .log().all()
                 .patch(Paths.USER_PATH + "user")
-                .then()
-                .log().all();
+                .then();
     }
 }

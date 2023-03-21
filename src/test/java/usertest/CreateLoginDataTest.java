@@ -38,6 +38,7 @@ public class CreateLoginDataTest {
         ValidatableResponse createResponse = usersData.create(user);
         accessToken = createResponse.extract().path("accessToken");
         statusCode = createResponse
+                .statusCode(200)
                 .body("success", equalTo(true))
                 .extract()
                 .statusCode();
@@ -50,10 +51,11 @@ public class CreateLoginDataTest {
         ValidatableResponse createResponse1 = usersData.create(user);
         ValidatableResponse createResponse2 = usersData.create(user);
         accessToken = createResponse1
+                .statusCode(200)
                 .extract()
                 .path("accessToken");
-
         statusCode = createResponse2
+                .statusCode(403)
                 .body("success", equalTo(false))
                 .extract()
                 .statusCode();
@@ -65,6 +67,7 @@ public class CreateLoginDataTest {
     public void createUserWithoutNameTest() {
         user.setName(null);
         statusCode = usersData.create(user)
+                .statusCode(403)
                 .body("success", equalTo(false))
                 .extract()
                 .statusCode();
@@ -76,6 +79,7 @@ public class CreateLoginDataTest {
     public void createUserWithoutEmailTest() {
         user.setEmail(null);
         statusCode = usersData.create(user)
+                .statusCode(403)
                 .body("success", equalTo(false))
                 .extract()
                 .statusCode();
@@ -87,6 +91,7 @@ public class CreateLoginDataTest {
     public void createUserWithoutPasswordTest() {
         user.setPassword(null);
         statusCode = usersData.create(user)
+                .statusCode(403)
                 .body("success", equalTo(false))
                 .extract()
                 .statusCode();

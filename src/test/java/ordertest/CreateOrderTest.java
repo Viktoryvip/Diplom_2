@@ -49,6 +49,7 @@ public class CreateOrderTest {
         ValidatableResponse loginResponse = usersData.login(login);
         accessToken = loginResponse.extract().path("accessToken");
         int statusCodeLogin = loginResponse
+                .statusCode(200)
                 .body("success", equalTo(true))
                 .extract()
                 .statusCode();
@@ -56,6 +57,7 @@ public class CreateOrderTest {
         order = new Order(ingredients);
         ValidatableResponse orderResponse = usersOrder.createOrderAuthorizedUser(order, accessToken);
         int statusCodeOrder = orderResponse
+                .statusCode(200)
                 .body("success", equalTo(true))
                 .extract()
                 .statusCode();
@@ -69,6 +71,7 @@ public class CreateOrderTest {
         order = new Order(ingredients);
         ValidatableResponse orderResponse = usersOrder.createOrderUnauthorizedUser(order);
         int statusCodeOrder = orderResponse
+                .statusCode(200)
                 .body("success", equalTo(true))
                 .extract()
                 .statusCode();
@@ -82,12 +85,14 @@ public class CreateOrderTest {
         ValidatableResponse loginResponse = usersData.login(login);
         accessToken = loginResponse.extract().path("accessToken");
         int statusCodeLogin = loginResponse
+               .statusCode(200)
                 .extract()
                 .statusCode();
 
         order = new Order(null);
         ValidatableResponse orderResponse = usersOrder.createOrderAuthorizedUser(order, accessToken);
         int statusCodeOrder = orderResponse
+                .statusCode(400)
                 .body("success", equalTo(false))
                 .extract()
                 .statusCode();
@@ -102,12 +107,14 @@ public class CreateOrderTest {
         ValidatableResponse loginResponse = usersData.login(login);
         accessToken = loginResponse.extract().path("accessToken");
         int statusCodeLogin = loginResponse
+                .statusCode(200)
                 .extract()
                 .statusCode();
 
         order = new Order(List.of("60d3463f7034a000269f45e7"));
         ValidatableResponse orderResponse = usersOrder.createOrderAuthorizedUser(order, accessToken);
         int statusCodeOrder = orderResponse
+                .statusCode(400)
                 .body("success", equalTo(false))
                 .extract()
                 .statusCode();

@@ -15,8 +15,7 @@ public class UsersOrder extends BaseSite {
                 .body(order)
                 .log().all()
                 .post(Paths.ORDER_PATH)
-                .then()
-                .log().all();
+                .then();
     }
 
     @Step("Создание заказа неавторизованного пользователя")
@@ -26,8 +25,7 @@ public class UsersOrder extends BaseSite {
                 .body(order)
                 .log().all()
                 .post(Paths.ORDER_PATH)
-                .then()
-                .log().all();
+                .then();
     }
 
     @Step("Получение заказа авторизованного пользователя")
@@ -37,8 +35,7 @@ public class UsersOrder extends BaseSite {
                 .header("Authorization", accessToken)
                 .log().all()
                 .get(Paths.ORDER_PATH)
-                .then()
-                .log().all();
+                .then();
     }
 
     @Step("Получение заказа неавторизованного пользователя")
@@ -47,7 +44,6 @@ public class UsersOrder extends BaseSite {
                 .spec(getBaseSpec())
                 .log().all()
                 .get(Paths.ORDER_PATH)
-                .then()
-                .log().all();
+                .then();
     }
 }

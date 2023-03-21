@@ -50,6 +50,7 @@ public class GetOrderTest {
         ValidatableResponse loginResponse = usersData.login(login);
         accessToken = loginResponse.extract().path("accessToken");
         int statusCodeLogin = loginResponse
+                .statusCode(200)
                 .body("success", equalTo(true))
                 .extract()
                 .statusCode();
@@ -58,6 +59,7 @@ public class GetOrderTest {
         order = new Order(ingredients);
         ValidatableResponse orderResponse = usersOrder.createOrderAuthorizedUser(order, accessToken);
         int statusCodeOrder = orderResponse
+                .statusCode(200)
                 .body("success", equalTo(true))
                 .extract()
                 .statusCode();
@@ -65,6 +67,7 @@ public class GetOrderTest {
 
         ValidatableResponse getResponseAuthorizedUser = usersOrder.getOrderAuthorizedUser(accessToken);
         int statusCodeGetOrder = getResponseAuthorizedUser
+                .statusCode(200)
                 .body("success", equalTo(true))
                 .extract()
                 .statusCode();
@@ -77,6 +80,7 @@ public class GetOrderTest {
         order = new Order(ingredients);
         ValidatableResponse orderResponseAuthorizedUser = usersOrder.createOrderUnauthorizedUser(order);
         int statusCodeGetOrderAuthorizedUser = orderResponseAuthorizedUser
+                .statusCode(200)
                 .body("success", equalTo(true))
                 .extract()
                 .statusCode();
@@ -84,6 +88,7 @@ public class GetOrderTest {
 
         ValidatableResponse orderResponseUnauthorizedUser = usersOrder.getOrderUnauthorizedUser();
         int statusCodeGetOrderUnauthorizedUser = orderResponseUnauthorizedUser
+                .statusCode(401)
                 .body("success", equalTo(false))
                 .extract()
                 .statusCode();

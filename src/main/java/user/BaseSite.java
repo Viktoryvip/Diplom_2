@@ -10,6 +10,7 @@ public class BaseSite {
         return new RequestSpecBuilder()
                 .setContentType(JSON)
                 .setBaseUri(BASE_URL)
-                .build();
+                .build()
+                .log().all();
     }
 }

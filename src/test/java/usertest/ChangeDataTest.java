@@ -39,6 +39,7 @@ public class ChangeDataTest {
         accessToken = loginResponse.extract().path("accessToken");
         ValidatableResponse updateResponse = usersData.updateAuthorizedUser(UserGenerator.getRandom(), accessToken);
         int statusCode = updateResponse
+                .statusCode(200)
                 .body("success", equalTo(true))
                 .extract()
                 .statusCode();
@@ -50,6 +51,7 @@ public class ChangeDataTest {
     public void changeDataForUnauthorizedUserTest() {
         ValidatableResponse updateResponse = usersData.updateUnauthorizedUser(UserGenerator.getRandom());
         int statusCode = updateResponse
+                .statusCode(401)
                 .body("success", equalTo(false))
                 .extract()
                 .statusCode();

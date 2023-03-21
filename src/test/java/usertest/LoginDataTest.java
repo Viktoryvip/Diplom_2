@@ -39,6 +39,7 @@ public class LoginDataTest {
         ValidatableResponse loginResponse = usersData.login(login);
         accessToken = loginResponse.extract().path("accessToken");
         int statusCode = loginResponse
+                .statusCode(200)
                 .body("success", equalTo(true))
                 .extract()
                 .statusCode();
@@ -52,6 +53,7 @@ public class LoginDataTest {
         Login login = new Login("email", user.getPassword());
         ValidatableResponse loginResponse = usersData.login(login);
         int statusCode = loginResponse
+                .statusCode(401)
                 .body("success", equalTo(false))
                 .extract()
                 .statusCode();
@@ -64,6 +66,7 @@ public class LoginDataTest {
         Login login = new Login(user.getEmail(), "password");
         ValidatableResponse loginResponse = usersData.login(login);
         int statusCode = loginResponse
+                .statusCode(401)
                 .body("success", equalTo(false))
                 .extract()
                 .statusCode();
